@@ -176,6 +176,7 @@ python Iopa_Preprocessing.py
 ## Future Work
 
 * Use a bigger dataset so that the model learns better
+* Use GAN in order to improve image quality
 * Replace rule-based thresholds with a CNN for quality classification
 * Use a U-Net or Autoencoder for image-to-image enhancement
 * Integrate with downstream diagnostic AI pipeline
