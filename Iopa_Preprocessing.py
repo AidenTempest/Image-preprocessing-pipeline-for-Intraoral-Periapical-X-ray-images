@@ -1,3 +1,4 @@
+
 import os
 import numpy as np
 import cv2
@@ -60,6 +61,12 @@ def save_adaptive_output(adaptive_img, fname):
     os.makedirs("processed", exist_ok=True)
     cv2.imwrite(os.path.join("processed", f"{fname}.png"), adaptive_img)
 
+def save_comparison(original, adaptive, fname, subfolder):
+    folder_path = os.path.join("comparisons", subfolder)
+    os.makedirs(folder_path, exist_ok=True)
+    combined = np.hstack((original, adaptive))
+    cv2.imwrite(os.path.join(folder_path, f"{fname}_compare.png"), combined)
+
 def auto_label(brightness, contrast, sharpness, noise):
     if brightness < 80:
         return 'underexposed'
@@ -94,10 +101,12 @@ def process_folder(input_dir, clf=None, collect_labels=False):
         if file_path.endswith(".dcm"):
             ds = pydicom.dcmread(file_path)
             img = ds.pixel_array.astype(np.uint8)
+            subfolder = "dcm"
         else:
             img = cv2.imread(file_path, cv2.IMREAD_GRAYSCALE)
             if img is None:
                 continue
+            subfolder = "gan"
 
         brightness = get_brightness(img)
         contrast = get_rms_contrast(img)
@@ -112,6 +121,7 @@ def process_folder(input_dir, clf=None, collect_labels=False):
 
         filename = os.path.splitext(os.path.basename(file_path))[0]
         save_adaptive_output(adaptive_img, filename)
+        save_comparison(img, adaptive_img, filename, subfolder)
 
         label = auto_label(brightness, contrast, sharpness, noise) if collect_labels else classify_quality(clf, [brightness, contrast, sharpness, noise]) if clf else 'unlabeled'
         if collect_labels:

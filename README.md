@@ -124,6 +124,7 @@ To evaluate effectiveness, I computed:
 
 * Only the final adaptively preprocessed image is saved (in `processed/` folder)
 * No static or original outputs unless needed for evaluation
+* Additionally, side-by-side visual comparisons (original vs adaptive) are saved for all images
 
 ---
 
@@ -138,6 +139,7 @@ To evaluate effectiveness, I computed:
 Adaptive pipeline consistently outperforms static preprocessing.
 
 ---
+
 
 ## Folder Structure
 
